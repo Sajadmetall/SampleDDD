@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  banking_apigateway:
+    image: bankingapigateway:${TAG:-latest}
+    build:
+      target: debug
+      context: .
+      dockerfile: src/ApiGateways/ApiGw-Base/CoreOcelotApiGateway/Dockerfile
+
+  banking_api:
+    image: bankingapi22:${TAG:-latest}
+    build:
+      target: debug
+      context: .
+      dockerfile: src/Banking/Banking.Api/Dockerfile
+    depends_on:
+      - banking_apigateway
+
+  selfservice_api:
+    image: selfserviceapi22:${TAG:-latest}
+    build:
+      target: debug
+      context: .
+      dockerfile: src/SelfService/SelfService.Api/Dockerfile
+    depends_on:
+      - banking_apigateway
